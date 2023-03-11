@@ -1,0 +1,576 @@
+﻿using System;
+using GurevichI_MP1;
+
+namespace GurevichI_MP1
+{
+    class MainClass
+    {
+        public const int START_CARDS = 5;
+
+        private const bool PLAYER_TURN = false;
+        private const bool CPU_TURN = true;
+
+        private static Random rng = new Random();
+
+        private const string INDX_NUMS = "0123456789";
+
+        static bool gameOn = false;
+        static bool stats = false;
+        static bool curPlayer = PLAYER_TURN;
+
+        public static void Main(string[] args)
+        {
+
+
+            Deck deck = new Deck();
+
+            Hand playerHand = new Hand();
+            Hand cpuHand = new Hand();
+
+            bool allowInput;
+
+            int userInput;
+            string userInputChoice;
+            int userStealChoice;
+
+            DealCards(playerHand, cpuHand, deck);
+
+
+            while (true)
+            {
+
+
+                Console.Clear();
+                Console.WriteLine("Welcome to Go Fish Game!");
+                Console.WriteLine("Press 1 to Play or 2 to Exit");
+
+                var keyInfo = Console.ReadKey(true);
+
+                switch (keyInfo.KeyChar)
+                {
+                    case '1':
+                        gameOn = true;
+                        break;
+                    case '2':
+                        Console.WriteLine("Thanks for playing!");
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Press any key to try again.");
+                        Console.ReadKey(true);
+                        break;
+                }
+
+
+                while (gameOn)
+                {
+                    if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) != 26)
+                    {
+                        //total amount of 
+                        if (!curPlayer)
+                        {
+                            allowInput = true;
+
+                            DrawGame(playerHand, cpuHand, deck);
+
+                            Console.WriteLine("1. Ask for a card");
+                            Console.WriteLine("2. Drop a pair");
+                            Console.WriteLine("3. Draw a card and end your turn");
+                            Console.Write("\nEnter input: ");
+
+                            userInput = Console.ReadKey().KeyChar;
+
+                            while (allowInput)
+                            {
+                                switch (userInput)
+                                {
+                                    case '1':
+
+                                        if (playerHand.GetSize() != 0)
+                                        {
+                                            bool isValidInput = true;
+
+                                            DrawGame(playerHand, cpuHand, deck);
+
+                                            Console.Write("Enter card to ask for (followed by ENTER): ");
+
+                                            userInputChoice = Console.ReadLine();
+                                            Console.WriteLine(userInputChoice.Length);
+                                            if (userInputChoice.Length != 0)
+                                            {
+                                                for (int i = 0; i < userInputChoice.Length; i++)
+                                                {
+                                                    if (!INDX_NUMS.Contains(Convert.ToString(userInputChoice[i])))
+                                                    {
+                                                        isValidInput = false;
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                isValidInput = false;
+                                            }
+
+
+                                            if (isValidInput)
+                                            {
+                                                userStealChoice = Convert.ToInt32(userInputChoice);
+
+                                                if (userStealChoice <= playerHand.GetSize() && userStealChoice > 0)
+                                                {
+                                                    int matchingCard = cpuHand.HasCardMatch(playerHand.GetCard(userStealChoice - 1));
+
+                                                    if (matchingCard != -1)
+                                                    {
+                                                        playerHand.AddCard(cpuHand.StealCard(matchingCard));
+
+                                                        DrawGame(playerHand, cpuHand, deck);
+                                                        Console.WriteLine("You stole a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+
+                                                        Console.WriteLine("\nPress ENTER to continue your turn");
+
+                                                        while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                        {
+                                                            DrawGame(playerHand, cpuHand, deck);
+                                                            Console.WriteLine("You stole a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+
+                                                            Console.WriteLine("\nPPress ENTER to continue your turn");
+                                                        }
+
+                                                        allowInput = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (deck.GetSize() != 0)
+                                                        {
+                                                            DrawGame(playerHand, cpuHand, deck);
+                                                            Console.WriteLine("The CPU does not have a " + playerHand.GetCard(userStealChoice - 1).GetRank() + "! GO FISH!");
+                                                            Console.WriteLine("\nPress ENTER to pick up a card");
+
+                                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                            {
+                                                                DrawGame(playerHand, cpuHand, deck);
+
+                                                                Console.WriteLine("The CPU does not have a " + playerHand.GetCard(userStealChoice - 1).GetRank() + "! GO FISH!");
+                                                                Console.WriteLine("\nPress ENTER to pick up a card");
+                                                            }
+
+                                                            playerHand.AddCard(deck.DrawCard());
+
+                                                            DrawGame(playerHand, cpuHand, deck);
+
+                                                            Console.WriteLine("You got a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+                                                            Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+
+                                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                            {
+                                                                DrawGame(playerHand, cpuHand, deck);
+
+                                                                Console.WriteLine("You got a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+                                                                Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            DrawGame(playerHand, cpuHand, deck);
+                                                            Console.WriteLine("You cant pick up a card because the deck is empty!");
+                                                            Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+
+                                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                            {
+                                                                DrawGame(playerHand, cpuHand, deck);
+                                                                Console.WriteLine("You cant pick up a card because the deck is empty!");
+                                                                Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+                                                            }
+                                                        }
+
+
+                                                        allowInput = false;
+                                                        curPlayer = !curPlayer;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    DrawGame(playerHand, cpuHand, deck);
+                                                    Console.WriteLine("Invalid card index! Press ENTER to try again!");
+
+                                                    while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                    {
+                                                        DrawGame(playerHand, cpuHand, deck);
+                                                        Console.WriteLine("Invalid card index! Press ENTER to try again!");
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("Invalid card index! Press ENTER to try again!");
+
+                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                {
+                                                    DrawGame(playerHand, cpuHand, deck);
+                                                    Console.WriteLine("Invalid card index! Press ENTER to try again!");
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("You cant ask for the CPU's cards because you do not have any cards!");
+                                            Console.WriteLine("\nPress ENTER to return to menu!");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("You cant ask for the CPU's cards because you do not have any cards!");
+                                                Console.WriteLine("\nPress ENTER to return to menu!");
+                                            }
+
+                                            allowInput = false;
+                                        }
+
+
+
+                                        break;
+
+                                    case '2':
+                                        if (playerHand.GetSize() != 0)
+                                        {
+                                            if (playerHand.HasAPair() != -1)
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("\nPress ENTER to drop your " + playerHand.GetCard(playerHand.HasAPair()).GetRank() + "s");
+
+                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                {
+                                                    DrawGame(playerHand, cpuHand, deck);
+                                                    Console.WriteLine("\nPress ENTER to drop your " + playerHand.GetCard(playerHand.HasAPair()).GetRank() + "s");
+                                                }
+
+                                                Card tempCard = playerHand.GetCard(playerHand.HasAPair());
+
+                                                playerHand.DropCards(playerHand.HasAPair(), playerHand.HasCardMatch(playerHand.GetCard(playerHand.HasAPair())));
+
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("You dropped a pair of " + tempCard.GetRank() + "'s!");
+                                                Console.WriteLine("\nPress ENTER to continue your turn!");
+
+                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                {
+                                                    DrawGame(playerHand, cpuHand, deck);
+                                                    Console.WriteLine("You dropped a pair of " + tempCard.GetRank() + "'s!");
+                                                    Console.WriteLine("\nPress ENTER to continue your turn!");
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("You do not have any pairs to drop!");
+                                                Console.WriteLine("\nPress ENTER to return to menu!");
+
+                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                {
+                                                    DrawGame(playerHand, cpuHand, deck);
+                                                    Console.WriteLine("You do not have any pairs to drop!");
+                                                    Console.WriteLine("\nPress ENTER to return to menu!");
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("You dont have any cards to drop!");
+                                            Console.WriteLine("\nPress ENTER to return to menu!");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("You dont have any cards to drop!");
+                                                Console.WriteLine("\nPress ENTER to return to menu!");
+                                            }
+                                        }
+
+
+                                        allowInput = false;
+                                        break;
+
+                                    case '3':
+                                        if (deck.GetSize() != 0)
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("\nPress ENTER to pick up a card");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("\nPress ENTER to pick up a card");
+                                            }
+
+                                            playerHand.AddCard(deck.DrawCard());
+
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("You picked up a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+                                            Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("You picked up a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+                                                Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("You can not pick up cards because the deck is empty!");
+                                            Console.WriteLine("\nPress ENTER to begin CPU's turn");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                                DrawGame(playerHand, cpuHand, deck);
+                                                Console.WriteLine("You can not pick up cards because the deck is empty!");
+                                                Console.WriteLine("\nPress ENTER to begin CPU's turn");
+                                            }
+                                        }
+
+
+                                        allowInput = false;
+                                        curPlayer = !curPlayer;
+                                        break;
+
+                                    default:
+                                        DrawGame(playerHand, cpuHand, deck);
+                                        Console.WriteLine("Invalid input!");
+                                        Console.WriteLine("\nPress ENTER to try again!");
+
+                                        while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("Invalid input!");
+                                            Console.WriteLine("\nPress ENTER to try again!");
+                                        }
+
+                                        allowInput = false;
+                                        break;
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            bool isStealing = true;
+
+                            while (cpuHand.HasAPair() != -1)
+                            {
+                                DrawGame(playerHand, cpuHand, deck);
+                                Console.WriteLine("The CPU is dropping a match!");
+                                Console.WriteLine("\nPress ENTER to continue");
+
+                                while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                {
+                                    DrawGame(playerHand, cpuHand, deck);
+                                    Console.WriteLine("The CPU is dropping a match!");
+                                    Console.WriteLine("\nPress ENTER to continue");
+                                }
+
+                                cpuHand.DropCards(cpuHand.HasAPair(), cpuHand.HasCardMatch(cpuHand.GetCard(cpuHand.HasAPair())));
+                            }
+
+
+                            while (isStealing)
+                            {
+                                int randIndx = rng.Next(0, cpuHand.GetSize());
+                                int matchingCard = playerHand.HasCardMatch(cpuHand.GetCard(randIndx));
+
+                                if (matchingCard != -1)
+                                {
+                                    DrawGame(playerHand, cpuHand, deck);
+                                    Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
+                                    Console.WriteLine("\nPress ENTER to give him your " + cpuHand.GetCard(randIndx).GetRank() + playerHand.GetCard(matchingCard).GetSuit());
+
+                                    while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                    {
+                                        DrawGame(playerHand, cpuHand, deck);
+                                        Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
+                                        Console.WriteLine("\nPress ENTER to give him your " + cpuHand.GetCard(randIndx).GetRank() + playerHand.GetCard(matchingCard).GetSuit());
+                                    }
+
+                                    cpuHand.AddCard(playerHand.StealCard(matchingCard));
+                                }
+                                else
+                                {
+                                    if (deck.GetSize() != 0)
+                                    {
+                                        DrawGame(playerHand, cpuHand, deck);
+                                        Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
+                                        Console.WriteLine("\nPress ENTER to make him GO FISH!");
+
+                                        while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
+                                            Console.WriteLine("\nPress ENTER to make him GO FISH!");
+                                        }
+
+                                        cpuHand.AddCard(deck.DrawCard());
+                                    }
+                                    else
+                                    {
+                                        if ((cpuHand.GetNumMatches() + playerHand.GetNumMatches()) == 26)
+                                        {
+                                            gameOn = false;
+                                        }
+                                        else
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("The CPU can't pick up a card since the deck is empty");
+                                            Console.WriteLine("\nPress ENTER to begin your turn!");
+                                        }
+                                    }
+
+                                    CheckWin(playerHand, cpuHand, deck);
+                                    isStealing = false;
+                                }
+                            }
+
+                            CheckWin(playerHand, cpuHand, deck);
+                            curPlayer = !curPlayer;
+                            allowInput = false;
+                        }
+                    }
+                    else
+                    {
+                        gameOn = false;
+                    }
+                }
+            }
+        }
+        private static void DealCards(Hand playerHand, Hand cpuHand, Deck deck)
+        {
+            deck.ResetDeck();
+
+            for (int i = 0; i < START_CARDS; i++)
+            {
+                playerHand.AddCard(deck.DrawCard());
+                cpuHand.AddCard(deck.DrawCard());
+            }
+        }
+
+        private static void DrawGame(Hand playerHand, Hand cpuHand, Deck deck)
+        {
+            if (deck.GetSize() >= 10)
+            {
+                Console.Clear();
+                DrawHand(playerHand, true);
+
+                Console.WriteLine(@"                                    Deck:
+                                    ┌────┐
+                                    │    │
+                                    │ " + deck.GetSize() + @" |
+                                    │    │
+                                    └────┘");
+
+
+                DrawHand(cpuHand, false);
+                Console.WriteLine("");
+            }
+
+            else if (deck.GetSize() <= 10)
+            {
+                Console.Clear();
+                DrawHand(playerHand, true);
+
+                Console.WriteLine(@"                                    Deck:
+                                 ┌────┐
+                                 │    │
+                                 │ " + deck.GetSize() + @"  |
+                                 │    │
+                                 └────┘");
+
+
+                DrawHand(cpuHand, false);
+                Console.WriteLine("");
+
+            }
+        }
+        private static void DrawHand(Hand hand, bool visible)
+        {
+            LoopHand(hand, "┌─────┐");
+            LoopHand(hand, "│     │");
+            hand.DisplayHand(visible);
+            Console.WriteLine("\t\t# of Matches: " + hand.GetNumMatches());
+            LoopHand(hand, "│     │");
+            LoopHand(hand, "└─────┘");
+
+            for (int i = 0; i < hand.GetSize(); i++)
+            {
+                Console.Write(Convert.ToString(i + 1).PadLeft(4).PadRight(7));
+            }
+            Console.WriteLine();
+
+        }
+
+        private static void LoopHand(Hand hand, string output)
+        {
+            for (int i = 0; i < hand.GetSize(); i++)
+            {
+                Console.Write(output);
+            }
+
+            Console.WriteLine();
+        }
+
+        public static void CheckWin(Hand playerHand, Hand cpuHand, Deck deck)
+        {
+            if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) == 26)
+            {
+                if (playerHand.GetNumMatches() > cpuHand.GetNumMatches())
+                {
+                    Console.Clear();
+                    Console.WriteLine("Congratulations, You won with" + playerHand.GetNumMatches());
+                }
+                else if (cpuHand.GetNumMatches() > playerHand.GetNumMatches())
+                {
+                    Console.Clear();
+                    Console.WriteLine("Sorry, you lost\nYou had " + playerHand.GetNumMatches() + "\nThe CPU had" + cpuHand.GetNumMatches());
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Its a Tie");
+                }
+
+                Console.WriteLine("What would you like to do\n1) Restart\n2) See Stats\n3)Exit");
+
+
+                var playerPick = Console.ReadKey(true);
+
+                switch (playerPick.KeyChar)
+                {
+                    case '1':
+                        gameOn = true;
+                        break;
+
+                    case '2':
+                        //Work On Stats
+                        Console.WriteLine("Work in Progress");
+                        stats = true;
+                        gameOn = false;
+                        break;
+
+                    case '3':
+                        Console.WriteLine("Thanks for playing!");
+                        Environment.Exit(0);
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice. Press any key to try again.");
+                        Console.ReadKey(true);
+                        break;
+                }
+
+            }
+        }
+    }
+}
