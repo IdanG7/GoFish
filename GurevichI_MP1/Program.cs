@@ -15,7 +15,8 @@ namespace GurevichI_MP1
         private const string INDX_NUMS = "0123456789";
 
         static bool gameOn = false;
-        static bool stats = false;
+        static bool screenOn = true;
+        static bool winCheck = false;
         static bool curPlayer = PLAYER_TURN;
 
         public static void Main(string[] args)
@@ -29,6 +30,8 @@ namespace GurevichI_MP1
 
             bool allowInput;
 
+
+
             int userInput;
             string userInputChoice;
             int userStealChoice;
@@ -36,7 +39,7 @@ namespace GurevichI_MP1
             DealCards(playerHand, cpuHand, deck);
 
 
-            while (true)
+            while (screenOn)
             {
 
 
@@ -66,7 +69,6 @@ namespace GurevichI_MP1
                 {
                     if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) != 26)
                     {
-                        //total amount of 
                         if (!curPlayer)
                         {
                             allowInput = true;
@@ -76,6 +78,28 @@ namespace GurevichI_MP1
                             Console.WriteLine("1. Ask for a card");
                             Console.WriteLine("2. Drop a pair");
                             Console.WriteLine("3. Draw a card and end your turn");
+
+
+                            if (playerHand.HasAPair() >= 1)
+                            {
+                                Console.Clear();
+                                DrawGame(playerHand, cpuHand, deck);
+                                Console.WriteLine("1. Ask for a card");
+
+                                Console.BackgroundColor = ConsoleColor.Yellow;
+                                Console.ForegroundColor = ConsoleColor.Black;
+
+                                Console.WriteLine("2. Drop a pair");
+                                Console.ResetColor();
+
+                                Console.WriteLine("3. Draw a card and end your turn");
+                            }
+
+                            if (playerHand.GetSize() == 0 && deck.GetSize() == 0)
+                            {
+                                Console.WriteLine("4. End Turn (No cards in your hand or deck");
+                            }
+
                             Console.Write("\nEnter input: ");
 
                             userInput = Console.ReadKey().KeyChar;
@@ -317,27 +341,32 @@ namespace GurevichI_MP1
                                             {
                                                 DrawGame(playerHand, cpuHand, deck);
                                                 Console.WriteLine("You picked up a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
-                                                Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+                                                Console.WriteLine("\nPress ENTER to return to menu!");
                                             }
+
                                         }
                                         else
                                         {
                                             DrawGame(playerHand, cpuHand, deck);
                                             Console.WriteLine("You can not pick up cards because the deck is empty!");
-                                            Console.WriteLine("\nPress ENTER to begin CPU's turn");
+                                            Console.WriteLine("\nPress ENTER to return to menu!");
 
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
                                                 DrawGame(playerHand, cpuHand, deck);
                                                 Console.WriteLine("You can not pick up cards because the deck is empty!");
-                                                Console.WriteLine("\nPress ENTER to begin CPU's turn");
+                                                Console.WriteLine("\nPress ENTER to return to menu!");
                                             }
                                         }
-
-
                                         allowInput = false;
                                         curPlayer = !curPlayer;
                                         break;
+
+                                    case '4':
+                                        allowInput = false;
+                                        curPlayer = !curPlayer;
+                                        break;
+
 
                                     default:
                                         DrawGame(playerHand, cpuHand, deck);
@@ -464,13 +493,15 @@ namespace GurevichI_MP1
                 Console.Clear();
                 DrawHand(playerHand, true);
 
-                Console.WriteLine(@"                                    Deck:
-                                    ┌────┐
-                                    │    │
-                                    │ " + deck.GetSize() + @" |
-                                    │    │
-                                    └────┘");
+                Console.WriteLine(@"
+ Deck
+┌────┐
+│    │
+│ " + deck.GetSize() + @" |
+│    │
+└────┘");
 
+                Console.WriteLine("\n");
 
                 DrawHand(cpuHand, false);
                 Console.WriteLine("");
@@ -481,12 +512,14 @@ namespace GurevichI_MP1
                 Console.Clear();
                 DrawHand(playerHand, true);
 
-                Console.WriteLine(@"                                    Deck:
-                                 ┌────┐
-                                 │    │
-                                 │ " + deck.GetSize() + @"  |
-                                 │    │
-                                 └────┘");
+                Console.WriteLine(@"
+ Deck
+┌────┐
+│    │
+│ " + deck.GetSize() + @"  |
+│    │
+└────┘");
+                Console.WriteLine("\n");
 
 
                 DrawHand(cpuHand, false);
@@ -523,53 +556,60 @@ namespace GurevichI_MP1
 
         public static void CheckWin(Hand playerHand, Hand cpuHand, Deck deck)
         {
-            if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) == 26)
+            if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) == 26 || playerHand.GetNumMatches() == 26 || cpuHand.GetNumMatches() == 26)
             {
-                if (playerHand.GetNumMatches() > cpuHand.GetNumMatches())
+                DrawGame(playerHand, cpuHand, deck);
+                Console.WriteLine("Gave Over\nCheck to see results");
+
+                var endPick = Console.ReadKey(true);
+
+                switch (endPick.Key)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Congratulations, You won with" + playerHand.GetNumMatches());
-                }
-                else if (cpuHand.GetNumMatches() > playerHand.GetNumMatches())
-                {
-                    Console.Clear();
-                    Console.WriteLine("Sorry, you lost\nYou had " + playerHand.GetNumMatches() + "\nThe CPU had" + cpuHand.GetNumMatches());
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Its a Tie");
-                }
-
-                Console.WriteLine("What would you like to do\n1) Restart\n2) See Stats\n3)Exit");
-
-
-                var playerPick = Console.ReadKey(true);
-
-                switch (playerPick.KeyChar)
-                {
-                    case '1':
-                        gameOn = true;
-                        break;
-
-                    case '2':
-                        //Work On Stats
-                        Console.WriteLine("Work in Progress");
-                        stats = true;
-                        gameOn = false;
-                        break;
-
-                    case '3':
-                        Console.WriteLine("Thanks for playing!");
-                        Environment.Exit(0);
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid choice. Press any key to try again.");
-                        Console.ReadKey(true);
+                    case ConsoleKey.Enter:
+                        winCheck = true;
                         break;
                 }
 
+                while (winCheck)
+                {
+                    if (playerHand.GetNumMatches() > cpuHand.GetNumMatches())
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Congratulations, You won with " + playerHand.GetNumMatches() + " Matches");
+                    }
+                    else if (cpuHand.GetNumMatches() > playerHand.GetNumMatches())
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Sorry, you lost\nYou had " + playerHand.GetNumMatches() + "Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Its a Tie");
+                    }
+
+                    Console.WriteLine("\n\nWhat would you like to do\n(R)estart\n(E)xit");
+
+
+                    var playerPick = Console.ReadKey(true);
+
+                    switch (playerPick.Key)
+                    {
+                        case (ConsoleKey)'R':
+                            gameOn = true;
+                            break;
+
+                        case (ConsoleKey)'E':
+                            Console.WriteLine("Thanks for playing!");
+                            Environment.Exit(0);
+                            break;
+
+                        default:
+                            Console.WriteLine("Invalid choice. Press any key to try again.");
+                            Console.ReadKey(true);
+                            break;
+                    }
+                }
             }
         }
     }

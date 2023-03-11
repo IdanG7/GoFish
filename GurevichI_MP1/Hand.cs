@@ -74,16 +74,16 @@ namespace GurevichI_MP1
 
         public int HasCardMatch(Card card)
         {
-            for (int i = 0; i < cards.Count(); i++)
+            for (int i = 0; i < cards.Count; i++)
             {
-                if (cards[i].GetRank() == card.GetRank())
+                if (cards[i] != null && cards[i].MatchCard(card))
                 {
                     return i;
                 }
             }
-
             return -1;
         }
+
 
         public bool DropCards(int idx1, int idx2)
         {

@@ -24,7 +24,7 @@ namespace GurevichI_MP1
             }
             else
             {
-                colour = ConsoleColor.White;
+                colour = ConsoleColor.Blue;
             }
         }
 
