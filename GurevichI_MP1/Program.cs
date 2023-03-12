@@ -337,6 +337,8 @@ namespace GurevichI_MP1
                                             Console.WriteLine("You picked up a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
                                             Console.WriteLine("\nPress ENTER to begin the CPU's turn");
 
+                                            curPlayer = !curPlayer;
+
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
                                                 DrawGame(playerHand, cpuHand, deck);
@@ -359,7 +361,6 @@ namespace GurevichI_MP1
                                             }
                                         }
                                         allowInput = false;
-                                        curPlayer = !curPlayer;
                                         break;
 
                                     case '4':
@@ -580,7 +581,7 @@ namespace GurevichI_MP1
                     else if (cpuHand.GetNumMatches() > playerHand.GetNumMatches())
                     {
                         Console.Clear();
-                        Console.WriteLine("Sorry, you lost\nYou had " + playerHand.GetNumMatches() + "Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
+                        Console.WriteLine("Sorry, you lost\nYou had " + playerHand.GetNumMatches() + " Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
                     }
                     else
                     {
@@ -596,10 +597,12 @@ namespace GurevichI_MP1
                     switch (playerPick.Key)
                     {
                         case (ConsoleKey)'R':
-                            gameOn = true;
+                            Console.Clear();
+                            Main(new string[] { });
                             break;
 
-                        case (ConsoleKey)'E':
+
+                        case ConsoleKey.E:
                             Console.WriteLine("Thanks for playing!");
                             Environment.Exit(0);
                             break;
