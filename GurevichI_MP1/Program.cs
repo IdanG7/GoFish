@@ -146,9 +146,6 @@ namespace GurevichI_MP1
 
                                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                             {
-                                                                DrawGame(playerHand, cpuHand, deck);
-                                                                Console.WriteLine("You stole a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
-                                                                Console.WriteLine("\nPPress ENTER to continue your turn");
                                                             }
                                                             allowInput = false;
                                                         }
@@ -163,9 +160,6 @@ namespace GurevichI_MP1
 
                                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                                 {
-                                                                    DrawGame(playerHand, cpuHand, deck);
-                                                                    Console.WriteLine("The CPU does not have a " + playerHand.GetCard(userStealChoice - 1).GetRank() + "! GO FISH!");
-                                                                    Console.WriteLine("\nPress ENTER to pick up a card");
                                                                 }
 
                                                                 playerHand.AddCard(deck.DrawCard());
@@ -176,10 +170,10 @@ namespace GurevichI_MP1
 
                                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                                 {
-                                                                    DrawGame(playerHand, cpuHand, deck);
-                                                                    Console.WriteLine("You got a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
-                                                                    Console.WriteLine("\nPress ENTER to begin the CPU's turn");
                                                                 }
+
+                                                                allowInput = false;
+                                                                curPlayer = !curPlayer;
                                                             }
 
                                                             else
@@ -190,9 +184,6 @@ namespace GurevichI_MP1
 
                                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                                 {
-                                                                    DrawGame(playerHand, cpuHand, deck);
-                                                                    Console.WriteLine("You cant pick up a card because the deck is empty!");
-                                                                    Console.WriteLine("\nPress ENTER to begin the CPU's turn");
                                                                 }
                                                                 allowInput = false;
                                                                 curPlayer = !curPlayer;
@@ -203,6 +194,19 @@ namespace GurevichI_MP1
                                                 }
                                             }
                                         }
+                                        else
+                                        {
+                                            DrawGame(playerHand, cpuHand, deck);
+                                            Console.WriteLine("You cant ask for the CPU's cards because you do not have any cards!");
+                                            Console.WriteLine("\nPress ENTER to return to menu!");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                            }
+
+                                            allowInput = false;
+                                        }
+
                                         break;
 
                                     case '2':
@@ -214,19 +218,18 @@ namespace GurevichI_MP1
                                                 Console.WriteLine("\nPress ENTER to drop your " + playerHand.GetCard(playerHand.HasAPair()).GetRank() + "s");
                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                 {
-                                                    DrawGame(playerHand, cpuHand, deck);
-                                                    Console.WriteLine("\nPress ENTER to drop your " + playerHand.GetCard(playerHand.HasAPair()).GetRank() + "s");
                                                 }
+
                                                 Card tempCard = playerHand.GetCard(playerHand.HasAPair());
+
                                                 playerHand.DropCards(playerHand.HasAPair(), playerHand.HasCardMatch(playerHand.GetCard(playerHand.HasAPair())));
+
                                                 DrawGame(playerHand, cpuHand, deck);
                                                 Console.WriteLine("You dropped a pair of " + tempCard.GetRank() + "'s!");
                                                 Console.WriteLine("\nPress ENTER to continue your turn!");
+
                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                 {
-                                                    DrawGame(playerHand, cpuHand, deck);
-                                                    Console.WriteLine("You dropped a pair of " + tempCard.GetRank() + "'s!");
-                                                    Console.WriteLine("\nPress ENTER to continue your turn!");
                                                 }
                                             }
                                             else
@@ -236,9 +239,6 @@ namespace GurevichI_MP1
                                                 Console.WriteLine("\nPress ENTER to return to menu!");
                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                 {
-                                                    DrawGame(playerHand, cpuHand, deck);
-                                                    Console.WriteLine("You do not have any pairs to drop!");
-                                                    Console.WriteLine("\nPress ENTER to return to menu!");
                                                 }
                                             }
                                         }
@@ -249,9 +249,6 @@ namespace GurevichI_MP1
                                             Console.WriteLine("\nPress ENTER to return to menu!");
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
-                                                DrawGame(playerHand, cpuHand, deck);
-                                                Console.WriteLine("You dont have any cards to drop!");
-                                                Console.WriteLine("\nPress ENTER to return to menu!");
                                             }
                                         }
                                         allowInput = false;
@@ -266,8 +263,6 @@ namespace GurevichI_MP1
 
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
-                                                DrawGame(playerHand, cpuHand, deck);
-                                                Console.WriteLine("\nPress ENTER to pick up a card");
                                             }
 
                                             playerHand.AddCard(deck.DrawCard());
@@ -280,9 +275,6 @@ namespace GurevichI_MP1
 
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
-                                                DrawGame(playerHand, cpuHand, deck);
-                                                Console.WriteLine("You picked up a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
-                                                Console.WriteLine("\nPress ENTER to return to menu!");
                                             }
 
                                         }
@@ -294,9 +286,6 @@ namespace GurevichI_MP1
 
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
-                                                DrawGame(playerHand, cpuHand, deck);
-                                                Console.WriteLine("You can not pick up cards because the deck is empty!");
-                                                Console.WriteLine("\nPress ENTER to return to menu!");
                                             }
                                         }
                                         allowInput = false;
@@ -316,9 +305,6 @@ namespace GurevichI_MP1
 
                                         while (Console.ReadKey().Key != ConsoleKey.Enter)
                                         {
-                                            DrawGame(playerHand, cpuHand, deck);
-                                            Console.WriteLine("Invalid input!");
-                                            Console.WriteLine("\nPress ENTER to try again!");
                                         }
 
                                         allowInput = false;
@@ -339,12 +325,10 @@ namespace GurevichI_MP1
 
                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                 {
-                                    DrawGame(playerHand, cpuHand, deck);
-                                    Console.WriteLine("The CPU is dropping a match!");
-                                    Console.WriteLine("\nPress ENTER to continue");
                                 }
 
                                 cpuHand.DropCards(cpuHand.HasAPair(), cpuHand.HasCardMatch(cpuHand.GetCard(cpuHand.HasAPair())));
+
                             }
 
                             while (isStealing)
@@ -360,9 +344,6 @@ namespace GurevichI_MP1
 
                                     while (Console.ReadKey().Key != ConsoleKey.Enter)
                                     {
-                                        DrawGame(playerHand, cpuHand, deck);
-                                        Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
-                                        Console.WriteLine("\nPress ENTER to give him your " + cpuHand.GetCard(randIndx).GetRank() + playerHand.GetCard(matchingCard).GetSuit());
                                     }
 
                                     cpuHand.AddCard(playerHand.StealCard(matchingCard));
@@ -377,9 +358,6 @@ namespace GurevichI_MP1
 
                                         while (Console.ReadKey().Key != ConsoleKey.Enter)
                                         {
-                                            DrawGame(playerHand, cpuHand, deck);
-                                            Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
-                                            Console.WriteLine("\nPress ENTER to make him GO FISH!");
                                         }
 
                                         cpuHand.AddCard(deck.DrawCard());
@@ -539,7 +517,7 @@ namespace GurevichI_MP1
 
                     switch (playerPick.Key)
                     {
-                        case (ConsoleKey)'R':
+                        case ConsoleKey.R:
                             Console.Clear();
                             Main(new string[] { });
                             break;

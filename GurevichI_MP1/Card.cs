@@ -74,9 +74,25 @@ namespace GurevichI_MP1
         }
 
 
+
         public bool MatchCard(Card card)
         {
-            return card.GetRank().Equals(this.rank);
+            string thisRank = GetRank();
+
+            string otherRank = card.GetRank();
+
+            if (thisRank == "10")
+            {
+                thisRank = "T";
+            }
+
+            if (otherRank == "10")
+            {
+                otherRank = "T";
+            }
+
+            return thisRank.Equals(otherRank);
         }
+
     }
 }
