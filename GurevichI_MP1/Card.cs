@@ -30,8 +30,16 @@ namespace GurevichI_MP1
 
         public string GetRank()
         {
-            return rank;
+            if (rank == "T")
+            {
+                return "10";
+            }
+            else
+            {
+                return rank;
+            }
         }
+
 
         public string GetSuit()
         {
@@ -40,21 +48,31 @@ namespace GurevichI_MP1
 
         public void Display(bool visible, int index)
         {
-            Console.Write("│  ");
+            Console.Write("│ ");
 
             if (visible)
             {
                 Console.ForegroundColor = colour;
-                Console.Write(rank + suit);
+
+                if (GetRank() == "10")
+                {
+                    Console.Write(GetRank() + suit);
+                }
+                else
+                {
+                    Console.Write(" " + GetRank() + suit);
+                }
+
                 Console.ResetColor();
+                Console.Write(" │");
             }
             else
             {
                 Console.Write("**");
+                Console.Write("  │");
             }
-
-            Console.Write(" │");
         }
+
 
         public bool MatchCard(Card card)
         {

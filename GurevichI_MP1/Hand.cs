@@ -87,28 +87,28 @@ namespace GurevichI_MP1
 
         public bool DropCards(int idx1, int idx2)
         {
-            if (cards[idx1].GetRank() == cards[idx2].GetRank())
+            if (idx1 < 0 || idx1 >= cards.Count || idx2 < 0 || idx2 >= cards.Count)
             {
-                numMatches++;
+                Console.WriteLine("Invalid indices!");
+                return false;
+            }
 
-                if (idx1 > idx2)
-                {
-                    cards.RemoveAt(idx1);
-                    cards.RemoveAt(idx2);
-                }
-                else
-                {
-                    cards.RemoveAt(idx2);
-                    cards.RemoveAt(idx1);
-                }
+            numMatches++;
 
-                return true;
+            if (idx1 > idx2)
+            {
+                cards.RemoveAt(idx1);
+                cards.RemoveAt(idx2);
             }
             else
             {
-                return false;
+                cards.RemoveAt(idx2);
+                cards.RemoveAt(idx1);
             }
+
+            return true;
         }
+
 
         public Card StealCard(int idx)
         {
