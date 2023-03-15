@@ -1,5 +1,11 @@
-﻿using System;
-using GurevichI_MP1;
+﻿// Author: Idan Gurevich
+// File Name: Program.cs
+// Project Name: GurevichI_MP1
+// Creation Date: 2023-03-08
+// Modified Date: 2023-03-15
+// Description: 
+
+using System;
 
 namespace GurevichI_MP1
 {
@@ -8,7 +14,6 @@ namespace GurevichI_MP1
         public const int START_CARDS = 5;
 
         private const bool PLAYER_TURN = false;
-        private const bool CPU_TURN = true;
 
         private static Random rng = new Random();
 
@@ -17,20 +22,17 @@ namespace GurevichI_MP1
         static bool gameOn = false;
         static bool screenOn = true;
         static bool winCheck = false;
-        static bool curPlayer = PLAYER_TURN;
+
+        static bool playerTurn = PLAYER_TURN;
 
         public static void Main(string[] args)
         {
-
-
             Deck deck = new Deck();
 
             Hand playerHand = new Hand();
             Hand cpuHand = new Hand();
 
             bool allowInput;
-
-
 
             int userInput;
             string userInputChoice;
@@ -41,8 +43,6 @@ namespace GurevichI_MP1
 
             while (screenOn)
             {
-
-
                 Console.Clear();
                 Console.WriteLine("Welcome to Go Fish Game!");
                 Console.WriteLine("Press 1 to Play or 2 to Exit");
@@ -69,16 +69,13 @@ namespace GurevichI_MP1
                 {
                     if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) != 26)
                     {
-                        if (!curPlayer)
+                        if (!playerTurn)
                         {
                             allowInput = true;
 
                             DrawGame(playerHand, cpuHand, deck);
 
-                            Console.WriteLine("1. Ask for a card");
-                            Console.WriteLine("2. Drop a pair");
-                            Console.WriteLine("3. Draw a card and end your turn");
-
+                            Console.WriteLine("1. Ask for a card\n2. Drop a pair\n3. Draw a card and end your turn");
 
                             if (playerHand.HasAPair() >= 1)
                             {
@@ -147,6 +144,7 @@ namespace GurevichI_MP1
                                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                             {
                                                             }
+
                                                             allowInput = false;
                                                         }
 
@@ -172,8 +170,7 @@ namespace GurevichI_MP1
                                                                 {
                                                                 }
 
-                                                                allowInput = false;
-                                                                curPlayer = !curPlayer;
+                                                                playerTurn = !playerTurn;
                                                             }
 
                                                             else
@@ -185,8 +182,8 @@ namespace GurevichI_MP1
                                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                                 {
                                                                 }
-                                                                allowInput = false;
-                                                                curPlayer = !curPlayer;
+
+                                                                playerTurn = !playerTurn;
                                                             }
                                                             allowInput = false;
                                                         }
@@ -271,7 +268,7 @@ namespace GurevichI_MP1
                                             Console.WriteLine("You picked up a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
                                             Console.WriteLine("\nPress ENTER to begin the CPU's turn");
 
-                                            curPlayer = !curPlayer;
+                                            playerTurn = !playerTurn;
 
                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                             {
@@ -294,7 +291,7 @@ namespace GurevichI_MP1
 
                                     case '4':
                                         allowInput = false;
-                                        curPlayer = !curPlayer;
+                                        playerTurn = !playerTurn;
                                         break;
 
 
@@ -382,7 +379,7 @@ namespace GurevichI_MP1
                             }
 
                             CheckWin(playerHand, cpuHand, deck);
-                            curPlayer = !curPlayer;
+                            playerTurn = !playerTurn;
                             allowInput = false;
                         }
                     }
@@ -451,6 +448,7 @@ namespace GurevichI_MP1
 
         private static void DrawHand(Hand hand, bool visible)
         {
+
             LoopHand(hand, "┌─────┐");
             LoopHand(hand, "│     │");
             hand.DisplayHand(visible);
@@ -497,12 +495,12 @@ namespace GurevichI_MP1
                     if (playerHand.GetNumMatches() > cpuHand.GetNumMatches())
                     {
                         Console.Clear();
-                        Console.WriteLine("Congratulations, You won with " + playerHand.GetNumMatches() + " Matches");
+                        Console.WriteLine("Congratulations, You won with " + playerHand.GetNumMatches() + " Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
                     }
                     else if (cpuHand.GetNumMatches() > playerHand.GetNumMatches())
                     {
                         Console.Clear();
-                        Console.WriteLine("Sorry, you lost\nYou had " + playerHand.GetNumMatches() + " Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
+                        Console.WriteLine("You lost sucker\nYou had " + playerHand.GetNumMatches() + " Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
                     }
                     else
                     {

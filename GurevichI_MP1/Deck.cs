@@ -1,6 +1,12 @@
-﻿using System;
+﻿// Author: Idan Gurevich
+// File Name: Deck.cs
+// Project Name: GurevichI_MP1
+// Creation Date: 2023-03-08
+// Modified Date: 2023-03-15
+// Description: 
+
+using System;
 using System.Collections.Generic;
-using GurevichI_MP1;
 
 namespace GurevichI_MP1
 {

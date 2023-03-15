@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Author: Idan Gurevich
+// File Name: Card.cs
+// Project Name: GurevichI_MP1
+// Creation Date: 2023-03-08
+// Modified Date: 2023-03-15
+// Description: This class represents a playing card in a standard deck of 52 cards.
+
+using System;
 namespace GurevichI_MP1
 {
     public class Card

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace GurevichI_MP1
@@ -28,7 +27,6 @@ namespace GurevichI_MP1
         {
             if (idx < 0 || idx >= cards.Count)
             {
-                // Handle the case where the index is out of range
                 return null;
             }
             return cards[idx];
@@ -114,11 +112,6 @@ namespace GurevichI_MP1
                 return false;
             }
         }
-
-
-
-
-
 
         public Card StealCard(int idx)
         {
