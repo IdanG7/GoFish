@@ -4,3 +4,9 @@
 /Users/idang/Projects/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.csproj.CoreCompileInputs.cache
 /Users/idang/Projects/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.exe
 /Users/idang/Projects/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.pdb
+/Users/idang/Desktop/ICS4U1/Assignments/Portfolio/Major/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.csproj.AssemblyReference.cache
+/Users/idang/Desktop/ICS4U1/Assignments/Portfolio/Major/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.csproj.CoreCompileInputs.cache
+/Users/idang/Desktop/ICS4U1/Assignments/Portfolio/Major/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.exe
+/Users/idang/Desktop/ICS4U1/Assignments/Portfolio/Major/GurevichI_MP1/GurevichI_MP1/obj/Debug/GurevichI_MP1.pdb
+/Users/idang/Desktop/ICS4U1/Assignments/Portfolio/Major/GurevichI_MP1/GurevichI_MP1/bin/Debug/GurevichI_MP1.exe
+/Users/idang/Desktop/ICS4U1/Assignments/Portfolio/Major/GurevichI_MP1/GurevichI_MP1/bin/Debug/GurevichI_MP1.pdb

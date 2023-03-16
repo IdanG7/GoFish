@@ -176,7 +176,7 @@ namespace GurevichI_MP1
                                                             else
                                                             {
                                                                 DrawGame(playerHand, cpuHand, deck);
-                                                                Console.WriteLine("You cant pick up a card because the deck is empty!");
+                                                                Console.WriteLine("You can't pick up a card because the CPU doesn't have that card!");
                                                                 Console.WriteLine("\nPress ENTER to begin the CPU's turn");
 
                                                                 while (Console.ReadKey().Key != ConsoleKey.Enter)
@@ -212,10 +212,7 @@ namespace GurevichI_MP1
                                             if (playerHand.HasAPair() != -1)
                                             {
                                                 DrawGame(playerHand, cpuHand, deck);
-                                                Console.WriteLine("\nPress ENTER to drop your " + playerHand.GetCard(playerHand.HasAPair()).GetRank() + "s");
-                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
-                                                {
-                                                }
+
 
                                                 Card tempCard = playerHand.GetCard(playerHand.HasAPair());
 
@@ -256,11 +253,6 @@ namespace GurevichI_MP1
                                         if (deck.GetSize() != 0)
                                         {
                                             DrawGame(playerHand, cpuHand, deck);
-                                            Console.WriteLine("\nPress ENTER to pick up a card");
-
-                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
-                                            {
-                                            }
 
                                             playerHand.AddCard(deck.DrawCard());
 
@@ -288,11 +280,11 @@ namespace GurevichI_MP1
                                         allowInput = false;
                                         break;
 
-
                                     case '4':
                                         allowInput = false;
                                         playerTurn = !playerTurn;
                                         break;
+
 
 
                                     default:
@@ -350,7 +342,13 @@ namespace GurevichI_MP1
                                     if (deck.GetSize() != 0)
                                     {
                                         DrawGame(playerHand, cpuHand, deck);
-                                        Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
+
+
+                                        if (cpuHand != null && cpuHand.GetSize() > randIndx)
+                                        {
+                                            Console.WriteLine("The CPU asked for a " + cpuHand.GetCard(randIndx).GetRank());
+                                        }
+
                                         Console.WriteLine("\nPress ENTER to make him GO FISH!");
 
                                         while (Console.ReadKey().Key != ConsoleKey.Enter)
@@ -363,7 +361,7 @@ namespace GurevichI_MP1
                                     {
                                         if ((cpuHand.GetNumMatches() + playerHand.GetNumMatches()) == 26)
                                         {
-                                            gameOn = false;
+
                                         }
                                         else
                                         {
@@ -372,26 +370,21 @@ namespace GurevichI_MP1
                                             Console.WriteLine("\nPress ENTER to begin your turn!");
                                         }
                                     }
-
-                                    CheckWin(playerHand, cpuHand, deck);
                                     isStealing = false;
                                 }
                             }
-
-                            CheckWin(playerHand, cpuHand, deck);
                             playerTurn = !playerTurn;
-                            allowInput = false;
                         }
                     }
-
                     else
                     {
                         gameOn = false;
                     }
+
+                    CheckWin(playerHand, cpuHand, deck);
                 }
             }
         }
-
 
         private static void DealCards(Hand playerHand, Hand cpuHand, Deck deck)
         {

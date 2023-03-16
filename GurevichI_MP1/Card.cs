@@ -3,7 +3,8 @@
 // Project Name: GurevichI_MP1
 // Creation Date: 2023-03-08
 // Modified Date: 2023-03-15
-// Description: This class represents a playing card in a standard deck of 52 cards.
+// Description: The Card class represents a single playing card in a deck. It contains information about the card's rank and suit,
+// as well as methods for displaying the card and checking if it matches another card. 
 
 using System;
 namespace GurevichI_MP1
@@ -80,13 +81,20 @@ namespace GurevichI_MP1
             }
         }
 
-
-
         public bool MatchCard(Card card)
         {
-            string thisRank = GetRank();
+            if (card == null)
+            {
+                return false;
+            }
 
+            string thisRank = GetRank();
             string otherRank = card.GetRank();
+
+            if (thisRank == null || otherRank == null)
+            {
+                return false;
+            }
 
             if (thisRank == "10")
             {
@@ -100,6 +108,9 @@ namespace GurevichI_MP1
 
             return thisRank.Equals(otherRank);
         }
+
+
+
 
     }
 }

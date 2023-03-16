@@ -1,4 +1,12 @@
-﻿using System.Collections.Generic;
+﻿// Author: Idan Gurevich
+// File Name: Card.cs
+// Project Name: GurevichI_MP1
+// Creation Date: 2023-03-08
+// Modified Date: 2023-03-15
+// Description: The Hand class manages a player's cards in a card game, allowing for adding and removing cards,
+// checking if a card is present, sorting cards, displaying cards, and finding matching cards.
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GurevichI_MP1

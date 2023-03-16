@@ -3,7 +3,8 @@
 // Project Name: GurevichI_MP1
 // Creation Date: 2023-03-08
 // Modified Date: 2023-03-15
-// Description: 
+// Description: The Deck class represents a deck of playing cards in a card game. It provides methods for shuffling the deck, dealing cards to players,
+// and checking if the deck is empty. The class also includes a collection of Card objects that make up the deck.
 
 using System;
 using System.Collections.Generic;
