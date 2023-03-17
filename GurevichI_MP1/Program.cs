@@ -2,7 +2,7 @@
 // File Name: Program.cs
 // Project Name: GurevichI_MP1
 // Creation Date: 2023-03-08
-// Modified Date: 2023-03-15
+// Modified Date: 2023-03-17
 // Description: 
 
 using System;
@@ -281,10 +281,26 @@ namespace GurevichI_MP1
                                         break;
 
                                     case '4':
-                                        allowInput = false;
-                                        playerTurn = !playerTurn;
-                                        break;
+                                        if (playerHand.GetSize() == 0 && deck.GetSize() == 0)
+                                        {
+                                            allowInput = false;
+                                            playerTurn = !playerTurn;
+                                        }
+                                        else
+                                        {
 
+                                            DrawGame(playerHand, cpuHand, deck);
+
+                                            Console.WriteLine("You cannot end your turn until you have played all cards in your hand and deck.");
+                                            Console.WriteLine("Press ENTER to return to menu.");
+
+                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                            {
+                                            }
+
+                                            allowInput = false;
+                                        }
+                                        break;
 
 
                                     default:

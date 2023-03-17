@@ -2,8 +2,8 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="GurevichI_MP1/Program.cs">
     <Files>
       <File FileName="GurevichI_MP1/Program.cs" Line="179" Column="147" />
-      <File FileName="GurevichI_MP1/Deck.cs" Line="1" Column="1" />
-      <File FileName="GurevichI_MP1/Card.cs" Line="83" Column="1" />
+      <File FileName="GurevichI_MP1/Deck.cs" />
+      <File FileName="GurevichI_MP1/Card.cs" />
       <File FileName="GurevichI_MP1/Hand.cs" />
     </Files>
     <Pads>
