@@ -1,10 +1,10 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{45851969-C72C-4AE6-9EC0-437C8F23D048}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="GurevichI_MP1/Program.cs">
     <Files>
-      <File FileName="GurevichI_MP1/Program.cs" Line="117" Column="1" />
-      <File FileName="GurevichI_MP1/Deck.cs" />
-      <File FileName="GurevichI_MP1/Card.cs" />
-      <File FileName="GurevichI_MP1/Hand.cs" />
+      <File FileName="GurevichI_MP1/Program.cs" Line="1" Column="1" />
+      <File FileName="GurevichI_MP1/Deck.cs" Line="67" Column="32" />
+      <File FileName="GurevichI_MP1/Card.cs" Line="10" Column="1" />
+      <File FileName="GurevichI_MP1/Hand.cs" Line="13" Column="2" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

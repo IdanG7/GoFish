@@ -426,7 +426,6 @@ namespace GurevichI_MP1
 │ " + deck.GetSize() + @" |
 │    │
 └────┘");
-
                 Console.WriteLine("\n");
 
                 DrawHand(cpuHand, false);
@@ -447,10 +446,8 @@ namespace GurevichI_MP1
 └────┘");
                 Console.WriteLine("\n");
 
-
                 DrawHand(cpuHand, false);
                 Console.WriteLine("");
-
             }
         }
 
@@ -469,7 +466,6 @@ namespace GurevichI_MP1
                 Console.Write(Convert.ToString(i + 1).PadLeft(4).PadRight(7));
             }
             Console.WriteLine();
-
         }
 
         private static void LoopHand(Hand hand, string output)
@@ -517,7 +513,6 @@ namespace GurevichI_MP1
                     }
 
                     Console.WriteLine("\n\nWhat would you like to do\n(R)estart\n(E)xit");
-
 
                     var playerPick = Console.ReadKey(true);
 

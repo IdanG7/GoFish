@@ -7,6 +7,7 @@
 // as well as methods for displaying the card and checking if it matches another card. 
 
 using System;
+
 namespace GurevichI_MP1
 {
     public class Card
