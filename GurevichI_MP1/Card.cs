@@ -48,7 +48,6 @@ namespace GurevichI_MP1
             }
         }
 
-
         public string GetSuit()
         {
             return suit;

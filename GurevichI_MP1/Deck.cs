@@ -65,7 +65,6 @@ namespace GurevichI_MP1
         public int GetSize()
         {
             return cards.Count;
-
         }
 
 

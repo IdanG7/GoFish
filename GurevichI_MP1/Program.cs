@@ -3,7 +3,8 @@
 // Project Name: GurevichI_MP1
 // Creation Date: 2023-03-08
 // Modified Date: 2023-03-17
-// Description: 
+// Description: A Console version of the game Go Fish which simulates most features you would expect
+// In a real world scenario.
 
 using System;
 using System.Text.RegularExpressions;
@@ -404,6 +405,15 @@ namespace GurevichI_MP1
 
         private static void DrawGame(Hand playerHand, Hand cpuHand, Deck deck)
         {
+            if (playerTurn)
+            {
+                Console.WriteLine("Player's Turn");
+            }
+            else
+            {
+                Console.WriteLine("CPU's Turn");
+            }
+
             if (deck.GetSize() >= 10)
             {
                 Console.Clear();
