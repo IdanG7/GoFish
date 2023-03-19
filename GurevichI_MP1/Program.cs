@@ -6,6 +6,7 @@
 // Description: 
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace GurevichI_MP1
 {
@@ -16,8 +17,6 @@ namespace GurevichI_MP1
         private const bool PLAYER_TURN = false;
 
         private static Random rng = new Random();
-
-        private const string INDX_NUMS = "0123456789";
 
         static bool gameOn = false;
         static bool screenOn = true;
@@ -32,14 +31,13 @@ namespace GurevichI_MP1
             Hand playerHand = new Hand();
             Hand cpuHand = new Hand();
 
-            bool allowInput;
+            bool menuInput;
 
             int userInput;
             string userInputChoice;
             int userStealChoice;
 
             DealCards(playerHand, cpuHand, deck);
-
 
             while (screenOn)
             {
@@ -64,14 +62,13 @@ namespace GurevichI_MP1
                         break;
                 }
 
-
                 while (gameOn)
                 {
                     if ((playerHand.GetNumMatches() + cpuHand.GetNumMatches()) != 26)
                     {
                         if (!playerTurn)
                         {
-                            allowInput = true;
+                            menuInput = true;
 
                             DrawGame(playerHand, cpuHand, deck);
 
@@ -101,12 +98,11 @@ namespace GurevichI_MP1
 
                             userInput = Console.ReadKey().KeyChar;
 
-                            while (allowInput)
+                            while (menuInput)
                             {
                                 switch (userInput)
                                 {
                                     case '1':
-
                                         if (playerHand.GetSize() != 0)
                                         {
                                             DrawGame(playerHand, cpuHand, deck);
@@ -114,80 +110,76 @@ namespace GurevichI_MP1
 
                                             userInputChoice = Console.ReadLine();
 
-                                            if (userInputChoice.Length != 0)
+                                            userInputChoice = Regex.Replace(userInputChoice, @"[^0-9]+", "");
+
+                                            if (!string.IsNullOrEmpty(userInputChoice))
                                             {
-                                                bool isValidInput = true;
-
-                                                for (int i = 0; i < userInputChoice.Length; i++)
+                                                if (int.TryParse(userInputChoice, out userStealChoice) && userStealChoice <= playerHand.GetSize() && userStealChoice > 0)
                                                 {
-                                                    if (!INDX_NUMS.Contains(Convert.ToString(userInputChoice[i])))
+                                                    int matchingCard = cpuHand.HasCardMatch(playerHand.GetCard(userStealChoice - 1));
+                                                    if (matchingCard != -1)
                                                     {
-                                                        isValidInput = false;
-                                                    }
-                                                }
+                                                        playerHand.AddCard(cpuHand.StealCard(matchingCard));
 
-                                                if (isValidInput)
-                                                {
-                                                    userStealChoice = Convert.ToInt32(userInputChoice);
+                                                        DrawGame(playerHand, cpuHand, deck);
+                                                        Console.WriteLine("You stole a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+                                                        Console.WriteLine("\nPress ENTER to continue your turn");
 
-                                                    if (userStealChoice <= playerHand.GetSize() && userStealChoice > 0)
-                                                    {
-                                                        int matchingCard = cpuHand.HasCardMatch(playerHand.GetCard(userStealChoice - 1));
-                                                        if (matchingCard != -1)
+                                                        while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                         {
-                                                            playerHand.AddCard(cpuHand.StealCard(matchingCard));
+                                                        }
 
+                                                        menuInput = false;
+                                                    }
+
+                                                    else
+                                                    {
+                                                        if (deck.GetSize() != 0)
+                                                        {
                                                             DrawGame(playerHand, cpuHand, deck);
-                                                            Console.WriteLine("You stole a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
-                                                            Console.WriteLine("\nPress ENTER to continue your turn");
+                                                            Console.WriteLine("The CPU does not have a " + playerHand.GetCard(userStealChoice - 1).GetRank() + "! GO FISH!");
+                                                            Console.WriteLine("\nPress ENTER to pick up a card");
 
                                                             while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                             {
                                                             }
 
-                                                            allowInput = false;
+                                                            playerHand.AddCard(deck.DrawCard());
+
+                                                            DrawGame(playerHand, cpuHand, deck);
+                                                            Console.WriteLine("You got a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
+                                                            Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+
+                                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                            {
+                                                            }
+
+                                                            playerTurn = !playerTurn;
                                                         }
 
                                                         else
                                                         {
-                                                            if (deck.GetSize() != 0)
+                                                            DrawGame(playerHand, cpuHand, deck);
+                                                            Console.WriteLine("You can't pick up a card because the CPU doesn't have that card!");
+                                                            Console.WriteLine("\nPress ENTER to begin the CPU's turn");
+
+                                                            while (Console.ReadKey().Key != ConsoleKey.Enter)
                                                             {
-                                                                DrawGame(playerHand, cpuHand, deck);
-                                                                Console.WriteLine("The CPU does not have a " + playerHand.GetCard(userStealChoice - 1).GetRank() + "! GO FISH!");
-                                                                Console.WriteLine("\nPress ENTER to pick up a card");
-
-                                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
-                                                                {
-                                                                }
-
-                                                                playerHand.AddCard(deck.DrawCard());
-
-                                                                DrawGame(playerHand, cpuHand, deck);
-                                                                Console.WriteLine("You got a " + playerHand.GetCard(playerHand.GetSize() - 1).GetRank() + "!");
-                                                                Console.WriteLine("\nPress ENTER to begin the CPU's turn");
-
-                                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
-                                                                {
-                                                                }
-
-                                                                playerTurn = !playerTurn;
                                                             }
 
-                                                            else
-                                                            {
-                                                                DrawGame(playerHand, cpuHand, deck);
-                                                                Console.WriteLine("You can't pick up a card because the CPU doesn't have that card!");
-                                                                Console.WriteLine("\nPress ENTER to begin the CPU's turn");
-
-                                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
-                                                                {
-                                                                }
-
-                                                                playerTurn = !playerTurn;
-                                                            }
-                                                            allowInput = false;
+                                                            playerTurn = !playerTurn;
                                                         }
+                                                        menuInput = false;
                                                     }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Invalid input. Please enter a number between 1 and " + playerHand.GetSize() + ".");
+                                                Console.WriteLine("\nPress ENTER to continue");
+
+                                                while (Console.ReadKey().Key != ConsoleKey.Enter)
+                                                {
                                                 }
                                             }
                                         }
@@ -201,9 +193,8 @@ namespace GurevichI_MP1
                                             {
                                             }
 
-                                            allowInput = false;
+                                            menuInput = false;
                                         }
-
                                         break;
 
                                     case '2':
@@ -245,9 +236,8 @@ namespace GurevichI_MP1
                                             {
                                             }
                                         }
-                                        allowInput = false;
+                                        menuInput = false;
                                         break;
-
 
                                     case '3':
                                         if (deck.GetSize() != 0)
@@ -277,13 +267,13 @@ namespace GurevichI_MP1
                                             {
                                             }
                                         }
-                                        allowInput = false;
+                                        menuInput = false;
                                         break;
 
                                     case '4':
                                         if (playerHand.GetSize() == 0 && deck.GetSize() == 0)
                                         {
-                                            allowInput = false;
+                                            menuInput = false;
                                             playerTurn = !playerTurn;
                                         }
                                         else
@@ -298,7 +288,7 @@ namespace GurevichI_MP1
                                             {
                                             }
 
-                                            allowInput = false;
+                                            menuInput = false;
                                         }
                                         break;
 
@@ -312,15 +302,14 @@ namespace GurevichI_MP1
                                         {
                                         }
 
-                                        allowInput = false;
+                                        menuInput = false;
                                         break;
                                 }
                             }
-
                         }
                         else
                         {
-                            bool isStealing = true;
+                            bool cpuTurn = true;
 
                             while (cpuHand.HasAPair() != -1)
                             {
@@ -336,7 +325,7 @@ namespace GurevichI_MP1
 
                             }
 
-                            while (isStealing)
+                            while (cpuTurn)
                             {
                                 int randIndx = rng.Next(0, cpuHand.GetSize());
                                 int matchingCard = playerHand.HasCardMatch(cpuHand.GetCard(randIndx));
@@ -386,7 +375,7 @@ namespace GurevichI_MP1
                                             Console.WriteLine("\nPress ENTER to begin your turn!");
                                         }
                                     }
-                                    isStealing = false;
+                                    cpuTurn = false;
                                 }
                             }
                             playerTurn = !playerTurn;
@@ -509,7 +498,7 @@ namespace GurevichI_MP1
                     else if (cpuHand.GetNumMatches() > playerHand.GetNumMatches())
                     {
                         Console.Clear();
-                        Console.WriteLine("You lost sucker\nYou had " + playerHand.GetNumMatches() + " Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
+                        Console.WriteLine("You lost sucker\n\nYou had " + playerHand.GetNumMatches() + " Matches\nThe CPU had " + cpuHand.GetNumMatches() + " Matches");
                     }
                     else
                     {

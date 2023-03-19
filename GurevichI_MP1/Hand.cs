@@ -50,7 +50,7 @@ namespace GurevichI_MP1
 
         public void DisplayHand(bool visible)
         {
-            for (int i = 0; i < GetSize(); i++)
+            for (int i = 0; i < 0; i++)
             {
                 cards[i].Display(visible, i + 1);
 
